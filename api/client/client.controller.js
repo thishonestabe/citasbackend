@@ -7,10 +7,10 @@ exports.login = async (req, res, next) => {
     // let error = Validations.loginValidation(req.body);
     // if(error) return res.status(400).send(error);
     let user = await Client.findOne({ where:
-    {
-        email: req.body.email
-    }
-});
+        {
+            email: req.body.email
+        }
+    });
     if(!user) return res.status(400).send('Invalid Credentials');
     const validPass = await bcrypt.compare(req.body.password, user.password)
     if(!validPass) return res.status(400).send('Invalid Credentials')
@@ -48,5 +48,12 @@ exports.register = async (req, res, next) => {
     //     res.status(400).send(error);
     // }
 }
+
+exports.logout = async (req, res, next) => {
+
+    const token = ''
+    res.header('auth-token', token).send('User Logged Out');
+
+};
 
 
