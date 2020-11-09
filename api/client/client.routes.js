@@ -3,23 +3,25 @@ const express = require('express');
 
 const clientController = require('./client.controller');
 
+const verify = require('../common/verifyToken');
+
 const router = express.Router();
 
 router.post('/login', clientController.login);
 
 router.post('/register', clientController.register);
 
-router.post('/logout', clientController.logout);
+router.post('/logout',verify, clientController.logout);
 
-router.get('/activeAppointment', clientController.activeAppoinment);
+router.get('/activeAppointment',verify, clientController.activeAppoinment);
 
-router.get('/allAppointments', clientController.allAppointments);
+router.get('/allAppointments',verify, clientController.allAppointments);
 
-router.get('/getAvailableAppointmentsByDate', clientController.getAvailableAppointmentsByDate);
+router.get('/getAvailableAppointmentsByDate',verify, clientController.getAvailableAppointmentsByDate);
 
-router.patch('/modifyActiveAppointment', clientController.modifyActiveAppointment);
+router.patch('/modifyActiveAppointment',verify, clientController.modifyActiveAppointment);
 
-router.patch('/cancelActiveAppointment', clientController.cancelActiveAppointment);
+router.patch('/cancelActiveAppointment',verify, clientController.cancelActiveAppointment);
 
 
 
