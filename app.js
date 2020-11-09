@@ -26,9 +26,12 @@ app.use(bodyParser.urlencoded({ extended: false }));
 //app.use('/api/cita', citaRouter);
 app.use('/api/client', clientRouter);
 
+Cita.belongsTo(Client);
+Client.hasMany(Cita);
+
 sequelize.sync()
     .then(result => {
-        console.log(result);
+        //console.log(result);
         app.listen(port, ()=> {
             console.log("server running on port: ",port);
         });

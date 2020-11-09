@@ -2,21 +2,29 @@ const Client = require('./client.model');
 const Cita = require('../cita/cita.model')
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const { Op } = require("sequelize");
 require('dotenv/config');
 exports.login = async (req, res, next) => {
     // let error = Validations.loginValidation(req.body);
     // if(error) return res.status(400).send(error);
-    let user = await Client.findOne({ where:
-        {
-            email: req.body.email
-        }
-    });
-    if(!user) return res.status(400).send('Invalid Credentials');
-    const validPass = await bcrypt.compare(req.body.password, user.password)
-    if(!validPass) return res.status(400).send('Invalid Credentials')
 
-    const token = jwt.sign({_id: user._id}, process.env.TOKEN_SECRET)
-    res.header('auth-token', token).send(token)
+    try {
+        let user = await Client.findOne({ where:
+                {
+                    email: req.body.email
+                }
+        });
+
+        if(!user) return res.status(400).send('Invalid Credentials');
+        const validPass = await bcrypt.compare(req.body.password, user.password)
+        if(!validPass) return res.status(400).send('Invalid Credentials')
+
+        const token = jwt.sign({_id: user.id}, process.env.TOKEN_SECRET)
+        res.header('auth-token', token).send(token)
+    } catch(e)  {
+        console.log("e inside login", e);
+    }
+
 
 };
 
@@ -55,5 +63,50 @@ exports.logout = async (req, res, next) => {
     res.header('auth-token', token).send('User Logged Out');
 
 };
+
+exports.activeAppoinment = async (req, res, next) => {
+
+    try {
+        //res.send(req.user)
+        let cita = await Cita.findAll({ where:
+                {
+                    [Op.and]: [
+                        {clientId: req.user},
+                        {status: 'open'},
+                    ]
+
+                }
+        });
+
+        if(cita.length === 0){
+            res.send('No active appointments')
+        } else {
+            res.send(cita);
+        }
+
+
+    } catch (e) {
+        console.log(e)
+        res.status(400).send(e);
+    }
+
+
+}
+
+exports.allAppointments = async (req, res, next) => {
+
+}
+
+exports.getAvailableAppointmentsByDate = async (req, res, next) => {
+
+}
+
+exports.modifyActiveAppointment = async (req, res, next) => {
+
+}
+
+exports.cancelActiveAppointment = async (req, res, next) => {
+
+}
 
 
