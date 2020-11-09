@@ -124,7 +124,52 @@ exports.getAvailableAppointmentsByDate = async (req, res, next) => {
 }
 
 exports.modifyActiveAppointment = async (req, res, next) => {
+    try {
+        //res.send(req.user)
+        let cita = await Cita.findOne({ where:
+                {
+                    [Op.and]: [
+                        {clientId: req.user},
+                        {status: 'open'},
+                    ]
 
+                }
+        });
+        let emptySlot = await Cita.findOne({ where:
+                {
+                    [Op.and]: [
+                        {date: req.body.date},
+                        {time: req.body.time},
+                        {status: 'open'},
+                    ]
+
+                }
+        });
+
+        if(cita.length === 0){
+            res.send('No active appointments')
+        } else {
+            if(!emptySlot) {
+                let newCita = await Cita.update(
+                    {
+                        status:'open',
+                        date:req.body.date,
+                        time:req.body.time,
+                        description: req.body.description
+                    },
+                    {where:{id: cita.id}});
+                res.send(newCita);
+            } else {
+                res.send('Appointment already exists at selected times')
+            }
+
+        }
+
+
+    } catch (e) {
+        console.log(e)
+        res.status(400).send(e);
+    }
 }
 
 exports.cancelActiveAppointment = async (req, res, next) => {
@@ -143,6 +188,7 @@ exports.cancelActiveAppointment = async (req, res, next) => {
         if(cita.length === 0){
             res.send('No active appointments')
         } else {
+
             let newCita = await Cita.update({status:'closed'},{where:{id: cita.id}});
             res.send(newCita);
         }
