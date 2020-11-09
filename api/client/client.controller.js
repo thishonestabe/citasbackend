@@ -64,7 +64,7 @@ exports.logout = async (req, res, next) => {
 
 };
 
-exports.activeAppoinment = async (req, res, next) => {
+exports.activeAppointment = async (req, res, next) => {
 
     try {
         //res.send(req.user)
@@ -95,6 +95,28 @@ exports.activeAppoinment = async (req, res, next) => {
 
 exports.allAppointments = async (req, res, next) => {
 
+    try {
+        //res.send(req.user)
+        let cita = await Cita.findAll({ where:
+                {
+
+                        clientId: req.user
+
+                }
+        });
+
+        if(cita.length === 0){
+            res.send('No appointments')
+        } else {
+            res.send(cita);
+        }
+
+
+    } catch (e) {
+        console.log(e)
+        res.status(400).send(e);
+    }
+
 }
 
 exports.getAvailableAppointmentsByDate = async (req, res, next) => {
@@ -106,6 +128,33 @@ exports.modifyActiveAppointment = async (req, res, next) => {
 }
 
 exports.cancelActiveAppointment = async (req, res, next) => {
+    try {
+        //res.send(req.user)
+        let cita = await Cita.findOne({ where:
+                {
+                    [Op.and]: [
+                        {clientId: req.user},
+                        {status: 'open'},
+                    ]
+
+                }
+        });
+
+        if(cita.length === 0){
+            res.send('No active appointments')
+        } else {
+            let newCita = await Cita.update({status:'closed'},{where:{id: cita.id}});
+            res.send(newCita);
+        }
+
+
+    } catch (e) {
+        console.log(e)
+        res.status(400).send(e);
+    }
+}
+
+exports.createAppointment = async (req, res, next) => {
 
 }
 

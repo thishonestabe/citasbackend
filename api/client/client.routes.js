@@ -13,7 +13,9 @@ router.post('/register', clientController.register);
 
 router.post('/logout',verify, clientController.logout);
 
-router.get('/activeAppointment',verify, clientController.activeAppoinment);
+router.post('/logout',verify, clientController.createAppointment);
+
+router.get('/activeAppointment',verify, clientController.activeAppointment);
 
 router.get('/allAppointments',verify, clientController.allAppointments);
 
