@@ -155,7 +155,33 @@ exports.cancelActiveAppointment = async (req, res, next) => {
 }
 
 exports.createAppointment = async (req, res, next) => {
+    try {
+        //res.send(req.user)
+        let cita = await Cita.findOrCreate({ where:
+                {
 
+                    [Op.and]: [
+                        {date: req.body.date},
+                        {time: req.body.time},
+                        {status: 'open'},
+                    ]
+
+                },
+            defaults: {description: req.body.description, clientId: req.user, status: 'open'}
+        });
+
+        if(cita.length === 0){
+            res.send(cita);
+        } else {
+            res.send('Appointment already exists at selected times')
+
+        }
+
+
+    } catch (e) {
+        console.log(e)
+        res.status(400).send(e);
+    }
 }
 
 
