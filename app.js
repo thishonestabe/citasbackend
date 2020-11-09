@@ -4,6 +4,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const sequelize = require('./util/database');
 const Cita = require('./api/cita/cita.model')
+const Client = require('./api/client/client.model')
 require('dotenv/config');
 const cors = require('cors');
 
@@ -15,6 +16,7 @@ const app = express();
 
 
 const citaRouter = require('./api/cita/cita.routes');
+const clientRouter = require('./api/client/client.routes');
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -22,6 +24,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 
 //app.use('/api/cita', citaRouter);
+//app.use('/api/client', clientRouter);
 
 sequelize.sync()
     .then(result => {
