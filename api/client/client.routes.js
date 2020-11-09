@@ -9,6 +9,8 @@ router.post('/login', clientController.login);
 
 router.post('/register', clientController.register);
 
+router.post('/logout', clientController.logout);
+
 router.get('/activeAppointment', clientController.activeAppoinment);
 
 router.get('/allAppointments', clientController.allAppointments);
