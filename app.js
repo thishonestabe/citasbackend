@@ -24,7 +24,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 
 //app.use('/api/cita', citaRouter);
-//app.use('/api/client', clientRouter);
+app.use('/api/client', clientRouter);
 
 sequelize.sync()
     .then(result => {
