@@ -1,4 +1,5 @@
-
+//TODO: error handling
+//TODO: function to decouple express from business logic
 const express = require('express');
 
 const clientController = require('./client.controller');

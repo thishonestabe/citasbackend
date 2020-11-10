@@ -1,3 +1,6 @@
+//TODO: add validation of user inputs
+//TODO: Code optimization maybe a service layer??
+
 const Client = require('./client.model');
 const Cita = require('../cita/cita.model')
 const bcrypt = require('bcryptjs');
